@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Activities"
+          android:icon="@drawable/groupactivity"
+          android:id="@+id/activitiesFragment" />
+    <item android:title="Interested Activities"
+          android:icon="@drawable/star"
+          android:id="@+id/starFragment" />
+    <item android:title="Registered Activities"
+          android:icon="@drawable/registeredactivity"
+          android:id="@+id/registeredFragment" />
+    <item android:title="Settings "
+          android:icon="@drawable/settings"
+          android:id="@+id/settingsFragment" />
+</menu>
