@@ -12,7 +12,7 @@ public class splashscreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
-        mySong=MediaPlayer.create(this,R.raw.music);
+        /*mySong=MediaPlayer.create(this,R.raw.music);
         mySong.start();
         Thread timer=new Thread(){
             public void run(){
@@ -25,7 +25,8 @@ public class splashscreen extends AppCompatActivity {
                     nextActivity();
                 }}} ;
 
-        timer.start();
+        timer.start(); */
+        nextActivity();
     }
 
     public void nextActivity(){
@@ -35,7 +36,7 @@ public class splashscreen extends AppCompatActivity {
 
     protected void onPause(){
         super.onPause();
-        mySong.release();
+        //mySong.release();
         finish();
     }
 }

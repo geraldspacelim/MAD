@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,16 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActivitiesFragment extends Fragment {
@@ -26,8 +33,11 @@ public class ActivitiesFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private View v;
     private RecyclerView ActivitiesList;
-    private FirestoreRecyclerAdapter adapter;
-
+    //private FirestoreRecyclerAdapter adapter;
+    ActivityAdapter adapter;
+    DatabaseReference databaseReference;
+    ArrayList<model> models;
+    FirebaseDatabase FirebaseDatabase;
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -59,9 +69,11 @@ public class ActivitiesFragment extends Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_activities, container, false);
         ActivitiesList = v.findViewById(R.id.activity_list);
-        setUpRecyclerView();
+        //setUpRecyclerView();
 
-        firebaseFirestore = firebaseFirestore.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Activities");
+        fetchdata();
+
 
         /*Query
         Query query = firebaseFirestore.collection("Activities");
@@ -92,6 +104,27 @@ public class ActivitiesFragment extends Fragment {
         return v;
     }
 
+    private void fetchdata() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                models = new ArrayList<model>();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    model m = dataSnapshot.getValue(model.class);
+                    models.add(m);
+                }
+                Log.e("i", String.valueOf(models.size()));
+                adapter = new ActivityAdapter(ActivitiesFragment.this.getActivity(), models);
+                ActivitiesList.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     /*private class ActivitiesViewHolder extends RecyclerView.ViewHolder{
 
         private TextView list_name, list_date, list_time, list_venue, list_cost;
@@ -106,7 +139,7 @@ public class ActivitiesFragment extends Fragment {
         }
     } */
 
-    public void setUpRecyclerView() {
+   /* public void setUpRecyclerView() {
         Query query = FirebaseFirestore.getInstance().collection("Activities");
         FirestoreRecyclerOptions<model> options = new FirestoreRecyclerOptions.Builder<model>().setQuery(query, model.class).build();
 
@@ -114,9 +147,9 @@ public class ActivitiesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         ActivitiesList.setLayoutManager(linearLayoutManager);
         ActivitiesList.setAdapter(adapter);
-    }
+    } */
 
-    @Override
+    /* @Override
     public void onStart() {
         super.onStart();
         if (adapter != null) {
@@ -130,5 +163,5 @@ public class ActivitiesFragment extends Fragment {
         if (adapter != null) {
             adapter.stopListening();
         }
-    }
+    } */
 }
